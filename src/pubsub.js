@@ -1,45 +1,45 @@
 var Bus = (function () {
-/*
-A function to represent a queue
-Created by Stephen Morley - http://code.stephenmorley.org/ - and released under the terms of the CC0 1.0 Universal legal code: http://creativecommons.org/publicdomain/zero/1.0/legalcode
-*/
-var Queue = function () {
-	var queue = [];
-	var offset = 0;
+	/*
+	A function to represent a queue
+	Created by Stephen Morley - http://code.stephenmorley.org/ - and released under the terms of the CC0 1.0 Universal legal code: http://creativecommons.org/publicdomain/zero/1.0/legalcode
+	*/
+	var Queue = function () {
+		var queue = [];
+		var offset = 0;
 
-	var me = {};
-	
-	function getLength() {
-		return (queue.length - offset);
-	}
-
-	me.isEmpty = function () {
-		return (queue.length == 0);
-	}
-	
-	me.enqueue = function (item) {
-		queue.push(item);
-	}
-
-	me.dequeue = function () {
-		if (queue.length == 0)
-			return undefined;
-
-		var item = queue[offset];
-
-		if (++offset * 2 >= queue.length) {
-			queue = queue.slice(offset);
-			offset = 0;
+		var me = {};
+		
+		function getLength() {
+			return (queue.length - offset);
 		}
 
-		return item;
-	}
-	me.peek = function () {
-		return (queue.length > 0 ? queue[offset] : undefined);
-	}
-	
-	return me;
-};
+		me.isEmpty = function () {
+			return (queue.length == 0);
+		}
+		
+		me.enqueue = function (item) {
+			queue.push(item);
+		}
+
+		me.dequeue = function () {
+			if (queue.length == 0)
+				return undefined;
+
+			var item = queue[offset];
+
+			if (++offset * 2 >= queue.length) {
+				queue = queue.slice(offset);
+				offset = 0;
+			}
+
+			return item;
+		}
+		me.peek = function () {
+			return (queue.length > 0 ? queue[offset] : undefined);
+		}
+		
+		return me;
+	};
 
 
 	var me = {};
