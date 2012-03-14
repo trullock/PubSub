@@ -5,7 +5,6 @@ Simple publisher-subscriber bus with handler invokation queuing and unlimited ar
 ## Subscribing
 
 <pre>
-var bus = new Bus();
 bus.subscribe("message name", function(){
 	// do stuff
 });
@@ -15,7 +14,6 @@ bus.subscribe("message name", function(){
 ## Publishing
 
 <pre>
-var bus = new Bus();
 bus.publish("message name");
 </pre>
 
@@ -25,7 +23,6 @@ bus.publish("message name");
 You can pass unlimited arguments:
 
 <pre>
-var bus = new Bus();
 bus.publish("message name", x, y, z);
 
 bus.subscribe("message name", function(arg1, arg2, arg3){
@@ -62,4 +59,21 @@ var handlerFunc = function() { };
 bus.subscribe("message name", handlerFunc);
 
 bus.unsubscribe(handlerFunc);
+</pre>
+
+## Complete Example
+
+<pre>
+var bus = new Bus();
+
+bus.subscribe("welcome", function(name){
+	alert('Welcome ' + name);
+});
+
+bus.subscribe("welcome", function(name){
+	if(window.console)
+		console.log('Welcome ' + name);
+});
+
+bus.publish("welcome", "Zuul");
 </pre>
