@@ -1,13 +1,25 @@
 $(document).ready(function(){
 
-	module("Subscribing");
-
-	test("Should be able to subscribe", function() {
-		var bus = new Bus();
-		bus.subscribe("name", function(){ });
-		expect(0);
+	module("Instances");
+	
+	test("multiple instances shouldnt conflict", function() {
+		var bus1 = new Bus();
+		bus1.subscribe("name", function(){ 
+			ok(true, "it worked");
+		});
+		
+		var bus2 = new Bus();
+		bus2.subscribe("name", function(){ 
+			ok(false, "it didnt work");
+		});
+		
+		bus1.publish("name");
+		expect(1);
 	});
 	
+	
+	module("Subscribing");
+
 	test("single subscription should fire on publish", function() {
 		var bus = new Bus();
 		bus.subscribe("name", function(){ 
@@ -29,7 +41,7 @@ $(document).ready(function(){
 		expect(2);
 	});
 	
-	test("multiple subscriptions should fire in order of subscription on publish", function() {
+	test("multiple subscriptions should fire in order of subscription", function() {
 		var bus = new Bus();
 		var order = [];
 		bus.subscribe("name", function(){ 

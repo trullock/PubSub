@@ -53,8 +53,6 @@ bus.unsubscribeAll("message name");
 You can remove a specific handler:
 
 <pre>
-var bus = new Bus();
-
 var handlerFunc = function() { };
 bus.subscribe("message name", handlerFunc);
 
