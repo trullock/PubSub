@@ -1,4 +1,46 @@
 var Bus = (function () {
+/*
+A function to represent a queue
+Created by Stephen Morley - http://code.stephenmorley.org/ - and released under the terms of the CC0 1.0 Universal legal code: http://creativecommons.org/publicdomain/zero/1.0/legalcode
+*/
+var Queue = function () {
+	var queue = [];
+	var offset = 0;
+
+	var me = {};
+	
+	function getLength() {
+		return (queue.length - offset);
+	}
+
+	me.isEmpty = function () {
+		return (queue.length == 0);
+	}
+	
+	me.enqueue = function (item) {
+		queue.push(item);
+	}
+
+	me.dequeue = function () {
+		if (queue.length == 0)
+			return undefined;
+
+		var item = queue[offset];
+
+		if (++offset * 2 >= queue.length) {
+			queue = queue.slice(offset);
+			offset = 0;
+		}
+
+		return item;
+	}
+	me.peek = function () {
+		return (queue.length > 0 ? queue[offset] : undefined);
+	}
+	
+	return me;
+};
+
 
 	var me = {};
 	var handlers = {};
@@ -17,7 +59,7 @@ var Bus = (function () {
 		});
 	};
 
-	me.Subscribe = function (type, func) {
+	me.subscribe = function (type, func) {
 		if (!handlers[type])
 			handlers[type] = [];
 
@@ -26,7 +68,7 @@ var Bus = (function () {
 		return this;
 	};
 	
-	me.Publish = function (type) {
+	me.publish = function (type) {
 		if (!handlers[type])
 			return;
 
@@ -45,14 +87,14 @@ var Bus = (function () {
 		return this;
 	};
 	
-	me.UnsubscribeAll = function(type){
+	me.unsubscribeAll = function(type){
 		if(type)
 			delete handlers[type]
 		else
 			handlers = {};
 	};
 
-	me.Unsubscribe = function(handler){
+	me.unsubscribe = function(handler){
 		for(var type in handlers){
 			for(var i in handlers[type]){
 				if(handlers[type][i] === handler){
@@ -67,4 +109,4 @@ var Bus = (function () {
 	
 	return me;
 
-})();
+});

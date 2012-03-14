@@ -5,7 +5,8 @@ Simple publisher-subscriber bus with handler invokation queuing and unlimited ar
 ## Subscribing
 
 <pre>
-Bus.Subscribe("message name", function(){
+var bus = new Bus();
+bus.Subscribe("message name", function(){
 	// do stuff
 });
 </pre>
@@ -14,7 +15,8 @@ Bus.Subscribe("message name", function(){
 ## Publishing
 
 <pre>
-Bus.Publish("message name");
+var bus = new Bus();
+bus.Publish("message name");
 </pre>
 
 
@@ -23,9 +25,10 @@ Bus.Publish("message name");
 You can pass unlimited arguments:
 
 <pre>
-Bus.Publish("message name", x, y, z);
+var bus = new Bus();
+bus.Publish("message name", x, y, z);
 
-Bus.Subscribe("message name", function(arg1, arg2, arg3){
+bus.Subscribe("message name", function(arg1, arg2, arg3){
 	// do stuff
 });
 </pre>
@@ -41,20 +44,22 @@ If any of the handlers publish new messages, the handlers for this message will 
 You can remove all handlers for all messages:
 
 <pre>
-Bus.UnsubscribeAll();
+bus.unsubscribeAll();
 </pre>
 
 You can remove all handlers for a given message:
 
 <pre>
-Bus.UnsubscribeAll("message name");
+bus.unsubscribeAll("message name");
 </pre>
 
 You can remove a specific handler:
 
 <pre>
-var handlerFunc = function() { };
-Bus.Subscribe("message name", handlerFunc);
+var bus = new Bus();
 
-Bus.Unsubscribe(handlerFunc);
+var handlerFunc = function() { };
+bus.subscribe("message name", handlerFunc);
+
+bus.unsubscribe(handlerFunc);
 </pre>

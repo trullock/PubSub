@@ -3,78 +3,78 @@ $(document).ready(function(){
 	module("Subscribing");
 
 	test("Should be able to subscribe", function() {
-		Bus.UnsubscribeAll();
-		Bus.Subscribe("name", function(){ });
+		var bus = new Bus();
+		bus.subscribe("name", function(){ });
 		expect(0);
 	});
 	
 	test("single subscription should fire on publish", function() {
-		Bus.UnsubscribeAll();
-		Bus.Subscribe("name", function(){ 
+		var bus = new Bus();
+		bus.subscribe("name", function(){ 
 			ok(true, "it worked");
 		});
-		Bus.Publish("name");
+		bus.publish("name");
 		expect(1);
 	});
 	
 	test("multiple subscriptions should fire on publish", function() {
-		Bus.UnsubscribeAll();
-		Bus.Subscribe("name", function(){ 
+		var bus = new Bus();
+		bus.subscribe("name", function(){ 
 			ok(true, "it worked");
 		});
-		Bus.Subscribe("name", function(){ 
+		bus.subscribe("name", function(){ 
 			ok(true, "it also worked");
 		});
-		Bus.Publish("name");
+		bus.publish("name");
 		expect(2);
 	});
 	
 	test("multiple subscriptions should fire in order of subscription on publish", function() {
-		Bus.UnsubscribeAll();
+		var bus = new Bus();
 		var order = [];
-		Bus.Subscribe("name", function(){ 
+		bus.subscribe("name", function(){ 
 			order.push(0);
 		});
-		Bus.Subscribe("name", function(){ 
+		bus.subscribe("name", function(){ 
 			order.push(1);
 		});
-		Bus.Publish("name");
+		bus.publish("name");
 		equal(0, order[0], "first fired first")
 		equal(1, order[1], "second fired second")
 	});
 	
-	module("Publishing");
+	module("publishing");
 	
 	test("nested publishing should fire handlers in correct order", function() {
-		Bus.UnsubscribeAll();
+		var bus = new Bus();
 		var order = [];
 		
-		Bus.Subscribe("a", function(){ 
+		bus.subscribe("a", function(){ 
 			order.push(0);
-			Bus.Publish("b");
+			bus.publish("b");
 		});
-		Bus.Subscribe("a", function(){ 
+		bus.subscribe("a", function(){ 
 			order.push(1);
-			Bus.Publish("c");
+			bus.publish("c");
 		});
 		
-		Bus.Subscribe("b", function(){ 
+		bus.subscribe("b", function(){ 
 			order.push(2);
-			Bus.Publish("d");
+			bus.publish("d");
 		});
-		Bus.Subscribe("b", function(){ 
+		bus.subscribe("b", function(){ 
 			order.push(3);
 		});
 		
-		Bus.Subscribe("c", function(){ 
+		bus.subscribe("c", function(){ 
 			order.push(4);
 		});
 		
-		Bus.Subscribe("d", function(){ 
+		bus.subscribe("d", function(){ 
 			order.push(5);
 		});
 		
-		Bus.Publish("a");
+		bus.publish("a");
 		
 		equal(0, order[0], "first fired first")
 		equal(1, order[1], "second fired second")
@@ -85,62 +85,62 @@ $(document).ready(function(){
 	});
 	
 	test("arguments should be passed", function() {
-		Bus.UnsubscribeAll();
-		Bus.Subscribe("x", function(a, b, c, d){ 
+		var bus = new Bus();
+		bus.subscribe("x", function(a, b, c, d){ 
 			equal(1, a);
 			equal(2, b);
 			equal(3, c);
 			equal(4, d);
 		});
-		Bus.Publish("x", 1, 2, 3, 4);
+		bus.publish("x", 1, 2, 3, 4);
 		expect(4);
 	});
 	
 	
-	module("Unsubscribing");
+	module("unsubscribing");
 
 	test("unsubscribe all should remove all subscriptions", function() {
-		Bus.UnsubscribeAll();
-		Bus.Subscribe("x", function(){ 
+		var bus = new Bus();
+		bus.subscribe("x", function(){ 
 			ok(false, "it didnt work");
 		});
-		Bus.Subscribe("y", function(){ 
+		bus.subscribe("y", function(){ 
 			ok(false, "it also didnt work");
 		});
-		Bus.UnsubscribeAll();
-		Bus.Publish("x");
-		Bus.Publish("y");
+		bus.unsubscribeAll();
+		bus.publish("x");
+		bus.publish("y");
 		expect(0);
 	});
 	
 	test("named unsubscribe should remove all subscriptions for that name", function() {
-		Bus.UnsubscribeAll();
-		Bus.Subscribe("x", function(){ 
+		var bus = new Bus();
+		bus.subscribe("x", function(){ 
 			ok(false, "it didnt work");
 		});
-		Bus.Subscribe("y", function(){ 
+		bus.subscribe("y", function(){ 
 			ok(true, "it worked");
 		});
-		Bus.UnsubscribeAll("x");
-		Bus.Publish("x");
-		Bus.Publish("y");
+		bus.unsubscribeAll("x");
+		bus.publish("x");
+		bus.publish("y");
 		expect(1);
 	});
 	
 	test("specific unsubscribe should remove only that handler", function() {
-		Bus.UnsubscribeAll();
+		var bus = new Bus();
 		var xFunc = function(){ 
 			ok(false, "it didnt work");
 		};
-		Bus.Subscribe("x", xFunc);
-		Bus.Subscribe("y", function(){ 
+		bus.subscribe("x", xFunc);
+		bus.subscribe("y", function(){ 
 			ok(true, "it worked");
 		});
 		
-		Bus.Unsubscribe(xFunc);
+		bus.unsubscribe(xFunc);
 		
-		Bus.Publish("x");
-		Bus.Publish("y");
+		bus.publish("x");
+		bus.publish("y");
 		expect(1);
 	});
 
