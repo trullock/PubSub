@@ -4,15 +4,6 @@ var Bus = (function () {
 	var handlers = {};
 	var queue = new Queue();
 
-	me.Subscribe = function (type, func) {
-		if (!handlers[type])
-			handlers[type] = [];
-
-		handlers[type].push(func);
-
-		return this;
-	};
-
 	function processQueue() {
 		while (!queue.isEmpty()) {
 			var action = queue.dequeue();
@@ -26,6 +17,15 @@ var Bus = (function () {
 		});
 	};
 
+	me.Subscribe = function (type, func) {
+		if (!handlers[type])
+			handlers[type] = [];
+
+		handlers[type].push(func);
+
+		return this;
+	};
+	
 	me.Publish = function (type) {
 		if (!handlers[type])
 			return;
