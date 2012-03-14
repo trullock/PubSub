@@ -1,6 +1,6 @@
 # PubSub
 
-Simple publisher-subscriber bus with message queuing and unlimited argument support.
+Simple publisher-subscriber bus with handler invokation queuing and unlimited argument support.
 
 ## Subscribing
 
