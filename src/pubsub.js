@@ -63,6 +63,9 @@ var Bus = (function () {
 		if (!handlers[type])
 			handlers[type] = [];
 
+		for(var i = 0; i < handlers[type].length; i++)
+			if(handlers[type][i] == func)
+			throw "Handler already subscribed to this message";
 		handlers[type].push(func);
 
 		return this;

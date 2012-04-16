@@ -55,6 +55,17 @@ $(document).ready(function(){
 		equal(1, order[1], "second fired second")
 	});
 	
+	test("shouldnt be able to subscribe the same handler twice", function() {
+		var bus = new Bus();
+		var handler = function() { };
+		
+		bus.subscribe("name", handler);
+		
+		raises(function(){
+			bus.subscribe("name", handler);
+		}, "should throw");
+	});
+	
 	module("publishing");
 	
 	test("nested publishing should fire handlers in correct order", function() {
