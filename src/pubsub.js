@@ -1,4 +1,6 @@
 var Bus = (function () {
+	"use strict";
+	
 	/*
 	A function to represent a queue
 	Created by Stephen Morley - http://code.stephenmorley.org/ - and released under the terms of the CC0 1.0 Universal legal code: http://creativecommons.org/publicdomain/zero/1.0/legalcode
@@ -6,7 +8,6 @@ var Bus = (function () {
 	var Queue = function () {
 		var queue = [];
 		var offset = 0;
-
 		var me = {};
 		
 		function getLength() {
@@ -14,15 +15,15 @@ var Bus = (function () {
 		}
 
 		me.isEmpty = function () {
-			return (queue.length == 0);
-		}
+			return (queue.length === 0);
+		};
 		
 		me.enqueue = function (item) {
 			queue.push(item);
-		}
+		};
 
 		me.dequeue = function () {
-			if (queue.length == 0)
+			if (queue.length === 0)
 				return undefined;
 
 			var item = queue[offset];
@@ -33,10 +34,11 @@ var Bus = (function () {
 			}
 
 			return item;
-		}
+		};
+		
 		me.peek = function () {
 			return (queue.length > 0 ? queue[offset] : undefined);
-		}
+		};
 		
 		return me;
 	};
@@ -51,21 +53,22 @@ var Bus = (function () {
 			var action = queue.dequeue();
 			action.call(null);
 		}
-	};
+	}
 
 	function enqueue(handler, args) {
 		queue.enqueue(function () {
 			handler.apply(null, args);
 		});
-	};
+	}
 
 	me.subscribe = function (type, func) {
 		if (!handlers[type])
 			handlers[type] = [];
 
-		for(var i = 0; i < handlers[type].length; i++)
-			if(handlers[type][i] == func)
-			throw "Handler already subscribed to this message";
+		for (var i = 0; i < handlers[type].length; i++)
+			if(handlers[type][i] === func)
+				throw "Handler already subscribed to this message";
+		
 		handlers[type].push(func);
 
 		return this;
@@ -102,7 +105,7 @@ var Bus = (function () {
 			for(var i in handlers[type]){
 				if(handlers[type][i] === handler){
 					handlers[type].splice(i, 1);
-					if(handlers[type].length == 0)
+					if(handlers[type].length === 0)
 						delete handlers[type];
 					return;
 				}
