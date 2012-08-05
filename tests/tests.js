@@ -3,7 +3,7 @@ $(document).ready(function(){
 	module("Instances");
 	
 	test("multiple instances shouldnt conflict", function() {
-		var bus1 = new Bus();
+		var bus1 = new Bus(true);
 		bus1.subscribe("name", function(){ 
 			ok(true, "it worked");
 		});
@@ -21,7 +21,7 @@ $(document).ready(function(){
 	module("Subscribing");
 
 	test("single subscription should fire on publish", function() {
-		var bus = new Bus();
+		var bus = new Bus(true);
 		bus.subscribe("name", function(){ 
 			ok(true, "it worked");
 		});
@@ -30,7 +30,7 @@ $(document).ready(function(){
 	});
 	
 	test("multiple subscriptions should fire on publish", function() {
-		var bus = new Bus();
+		var bus = new Bus(true);
 		bus.subscribe("name", function(){ 
 			ok(true, "it worked");
 		});
@@ -42,7 +42,7 @@ $(document).ready(function(){
 	});
 	
 	test("multiple subscriptions should fire in order of subscription", function() {
-		var bus = new Bus();
+		var bus = new Bus(true);
 		var order = [];
 		bus.subscribe("name", function(){ 
 			order.push(0);
@@ -56,7 +56,7 @@ $(document).ready(function(){
 	});
 	
 	test("shouldnt be able to subscribe the same handler twice", function() {
-		var bus = new Bus();
+		var bus = new Bus(true);
 		var handler = function() { };
 		
 		bus.subscribe("name", handler);
@@ -66,10 +66,27 @@ $(document).ready(function(){
 		}, "should throw");
 	});
 	
+	test("subscribeonce should only fire once", function() {
+		var bus = new Bus(true);
+		var timesFired = 0;
+		var handler = function(x, y) { 
+			timesFired++;
+			equal(y, x + 1, "args passed correctly");
+		};
+		
+		bus.subscribeOnce("name", handler);
+		
+		bus.publish("name", 1, 2);
+		bus.publish("name", 2, 3);
+		
+		
+		equal(timesFired, 1, "fired only once")
+	});
+	
 	module("publishing");
 	
 	test("nested publishing should fire handlers in correct order", function() {
-		var bus = new Bus();
+		var bus = new Bus(true);
 		var order = [];
 		
 		bus.subscribe("a", function(){ 
@@ -108,7 +125,7 @@ $(document).ready(function(){
 	});
 	
 	test("arguments should be passed", function() {
-		var bus = new Bus();
+		var bus = new Bus(true);
 		bus.subscribe("x", function(a, b, c, d){ 
 			equal(1, a);
 			equal(2, b);
@@ -123,7 +140,7 @@ $(document).ready(function(){
 	module("unsubscribing");
 
 	test("unsubscribe all should remove all subscriptions", function() {
-		var bus = new Bus();
+		var bus = new Bus(true);
 		bus.subscribe("x", function(){ 
 			ok(false, "it didnt work");
 		});
@@ -137,7 +154,7 @@ $(document).ready(function(){
 	});
 	
 	test("named unsubscribe should remove all subscriptions for that name", function() {
-		var bus = new Bus();
+		var bus = new Bus(true);
 		bus.subscribe("x", function(){ 
 			ok(false, "it didnt work");
 		});
@@ -151,7 +168,7 @@ $(document).ready(function(){
 	});
 	
 	test("specific unsubscribe should remove only that handler", function() {
-		var bus = new Bus();
+		var bus = new Bus(true);
 		var xFunc = function(){ 
 			ok(false, "it didnt work");
 		};

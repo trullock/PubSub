@@ -74,6 +74,15 @@ var Bus = (function () {
 		return this;
 	};
 	
+	me.subscribeOnce = function(type, func){
+		var handler = function(){
+			me.unsubscribe(handler);
+
+			func.apply(null, arguments);
+		};
+		me.subscribe(type, handler);
+	};
+	
 	me.publish = function (type) {
 		if (!handlers[type])
 			return;
