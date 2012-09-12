@@ -47,7 +47,8 @@ var Bus = (function () {
 	var me = {};
 	var handlers = {};
 	var queue = new Queue();
-
+	var processing;
+	
 	function processQueue() {
 		while (!queue.isEmpty()) {
 			var action = queue.dequeue();
@@ -96,9 +97,13 @@ var Bus = (function () {
 			enqueue(handlers[type][i], args);
 		}
 
-		while (!queue.isEmpty())
-			processQueue();
-
+		if(!processing){
+			while (!queue.isEmpty()){
+				processing = true;
+				processQueue();
+			}
+			processing = false;
+		}
 		return this;
 	};
 	
